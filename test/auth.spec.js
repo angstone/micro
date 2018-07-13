@@ -1,6 +1,6 @@
 'use strict'
 
-describe('CONFIG SERVER', function() {
+describe('AUTH', function() {
 
   let server
   let micro
@@ -27,27 +27,28 @@ describe('CONFIG SERVER', function() {
 
   it('Should be able to be created', function(done) {
     micro.addProcedure({
-      load: ['configServer'],
+      load: ['auth'],
     }).start();
     expect(micro).to.be.exists();
     micro.procedures.should.contain.a.thing.with.property('load');
-    expect( micro.procedures.filter(procedure=>!!procedure.load.configServer).length ).to.be.at.least(1);
+    expect( micro.procedures.filter(procedure=>!!procedure.load.auth).length ).to.be.at.least(1);
     done()
   })
 
-  it('Should be able to respond ping', function(done) {
+  it('Should be able to Respond a ping', function(done) {
     micro.addProcedure({
-      load: ['configServer'],
+      load: ['auth'],
     }).start();
     expect(micro).to.be.exists();
-    micro.act('get config ping', (err, ans)=>{
+    micro.act('get auth ping', (err, ans)=>{
       expect(err).not.to.be.exists()
       expect(ans).to.be.equals('pong')
       done()
     });
   })
 
-  it('Should be able to be created with a basic config and respond it', function(done) {
+  /*
+  it('CONFIG SERVER Should be able to be created with a basic config and respond it', function(done) {
     const config = { lord: 'Jesus' };
     micro.addProcedure({
       load: ['configServer'],
@@ -63,7 +64,7 @@ describe('CONFIG SERVER', function() {
     });
   })
 
-  it('Should be able to set a config and respond it', function(done) {
+  it('CONFIG SERVER Should be able to set a config and respond it', function(done) {
     const config = { lord: 'Jesus Cristo' };
     micro.addProcedure({
       load: ['configServer'],
@@ -79,7 +80,7 @@ describe('CONFIG SERVER', function() {
     });
   })
 
-  it('Should be able to set a deep config and respond it', function(done) {
+  it('CONFIG SERVER Should be able to set a deep config and respond it', function(done) {
     const config = { lord: 'Jesus Cristo The Lord', liveFor: 'mySelf' };
     const liveFor = 'love';
     micro.addProcedure({
@@ -100,7 +101,7 @@ describe('CONFIG SERVER', function() {
     });
   })
 
-  it('Should be able to get a deep config', function(done) {
+  it('CONFIG SERVER Should be able to get a deep config', function(done) {
     const liveFor = 'Love Each Other';
     const config = { lord: 'Jesus Cristo The Lord Of My Life', liveFor };
     micro.addProcedure({
@@ -117,7 +118,7 @@ describe('CONFIG SERVER', function() {
     });
   })
 
-  it('Should be able to set and get a very deep config', function(done) {
+  it('CONFIG SERVER Should be able to set and get a very deep config', function(done) {
     let so = { it: { will: 'be nice' }, he: 'is'};
     let newAs = { many: 'as possible', so };
     let other = { as: 'nothing', after: 'nice' };
@@ -144,7 +145,7 @@ describe('CONFIG SERVER', function() {
     });
   })
 
-  it('Should be able to set and get a very deep config in this other scenary', function(done) {
+  it('CONFIG SERVER Should be able to set and get a very deep config in this other scenary', function(done) {
     let love = 'love more';
     let config = { lord: 'JC', liveFor: { love: { each: { other:'as ourself' } }, share: { knowledge: 'a lot' } } };
     micro.addProcedure({
@@ -168,5 +169,45 @@ describe('CONFIG SERVER', function() {
       });
     });
   })
+
+  it('Should be void started', function(done) {
+    micro.start(()=>{
+      expect(micro).to.be.exists()
+      expect(micro.env.nats_url).to.be.equals(nats_url)
+      done()
+    });
+  })
+
+  it('Should be able to add a command and start serving it', function(done) {
+    let action = 'add';
+    let func = (req, cb)=>{ cb(null, { result: req.a + req.b }) };
+    micro.add(action, func).start(()=>{
+      expect(micro.hemera_add_array).to.be.exists()
+      expect(micro.hemera_add_array).to.be.array()
+      expect(micro.hemera_add_array[0].action).to.be.equals(action)
+      micro.hemera_add_array[0].func({ payload: {a:2, b:3} }, (err, ans)=>{
+        expect(err).not.to.be.exists()
+        expect(ans.result).to.be.exists()
+        expect(ans.result).to.be.equals(5)
+        done()
+      })
+    });
+  })
+
+  it('Should be able to request/reply', function(done) {
+    const micro = Micro.create({ debug: true, nats_url }).add('add', (req, cb)=>{
+      cb(null, { result: req.a + req.b });
+    });
+    micro.start(()=>{
+      setTimeout(()=>{
+        micro.act('add', { a: 1, b: 2 }, (err, resp)=>{
+          expect(err).not.to.be.exists()
+          expect(resp.result).to.be.equals(3)
+          done()
+        });
+      },200);
+    });
+  })
+  */
 
 })

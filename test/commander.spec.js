@@ -1,6 +1,6 @@
 'use strict'
 
-describe('CONFIG SERVER', function() {
+describe('COMMANDER', function() {
 
   let server
   let micro
@@ -27,29 +27,17 @@ describe('CONFIG SERVER', function() {
 
   it('Should be able to be created', function(done) {
     micro.addProcedure({
-      load: ['configServer'],
+      load: ['commander'],
     }).start();
     expect(micro).to.be.exists();
     micro.procedures.should.contain.a.thing.with.property('load');
-    expect( micro.procedures.filter(procedure=>!!procedure.load.configServer).length ).to.be.at.least(1);
+    expect( micro.procedures.filter(procedure=>!!procedure.load.commander).length ).to.be.at.least(1);
     done()
   })
 
-  it('Should be able to respond ping', function(done) {
-    micro.addProcedure({
-      load: ['configServer'],
-    }).start();
-    expect(micro).to.be.exists();
-    micro.act('get config ping', (err, ans)=>{
-      expect(err).not.to.be.exists()
-      expect(ans).to.be.equals('pong')
-      done()
-    });
-  })
-
-  it('Should be able to be created with a basic config and respond it', function(done) {
+  /*it('Should be able to be created with a basic config and respond it', function(done) {
     const config = { lord: 'Jesus' };
-    micro.addProcedure({
+    const micro = Micro.create({ nats_url }).addProcedure({
       load: ['configServer'],
       start: function() {
         this.load.configServer.setConfig(config);
@@ -65,7 +53,7 @@ describe('CONFIG SERVER', function() {
 
   it('Should be able to set a config and respond it', function(done) {
     const config = { lord: 'Jesus Cristo' };
-    micro.addProcedure({
+    const micro = Micro.create({ nats_url }).addProcedure({
       load: ['configServer'],
     }).start();
     expect(micro).to.be.exists();
@@ -82,7 +70,7 @@ describe('CONFIG SERVER', function() {
   it('Should be able to set a deep config and respond it', function(done) {
     const config = { lord: 'Jesus Cristo The Lord', liveFor: 'mySelf' };
     const liveFor = 'love';
-    micro.addProcedure({
+    const micro = Micro.create({ nats_url }).addProcedure({
       load: ['configServer'],
       start: function() {
         this.load.configServer.setConfig(config);
@@ -103,7 +91,7 @@ describe('CONFIG SERVER', function() {
   it('Should be able to get a deep config', function(done) {
     const liveFor = 'Love Each Other';
     const config = { lord: 'Jesus Cristo The Lord Of My Life', liveFor };
-    micro.addProcedure({
+    const micro = Micro.create({ nats_url }).addProcedure({
       load: ['configServer'],
       start: function() {
         this.load.configServer.setConfig(config);
@@ -122,7 +110,7 @@ describe('CONFIG SERVER', function() {
     let newAs = { many: 'as possible', so };
     let other = { as: 'nothing', after: 'nice' };
     let config = { lord: 'JC', liveFor: { love: { each: { other } }, share: { knowledge: 'a lot' } } };
-    micro.addProcedure({
+    const micro = Micro.create({ nats_url }).addProcedure({
       load: ['configServer'],
       start: function() {
         this.load.configServer.setConfig(config);
@@ -147,7 +135,7 @@ describe('CONFIG SERVER', function() {
   it('Should be able to set and get a very deep config in this other scenary', function(done) {
     let love = 'love more';
     let config = { lord: 'JC', liveFor: { love: { each: { other:'as ourself' } }, share: { knowledge: 'a lot' } } };
-    micro.addProcedure({
+    const micro = Micro.create({ nats_url }).addProcedure({
       load: ['configServer'],
       start: function() {
         this.load.configServer.setConfig(config);
@@ -168,5 +156,7 @@ describe('CONFIG SERVER', function() {
       });
     });
   })
+
+  */
 
 })

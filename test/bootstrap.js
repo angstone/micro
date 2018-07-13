@@ -1,17 +1,11 @@
 //'use strict'
 
-(function() {
-    var childProcess = require("child_process");
-    var oldSpawn = childProcess.spawn;
-    function mySpawn() {
-        console.log('spawn called');
-        console.log(arguments);
-        var result = oldSpawn.apply(this, arguments);
-        return result;
-    }
-    childProcess.spawn = mySpawn;
-})();
+// Fix memory leaks preventer warnings about event mas listeners limit. Please track this number!
+// 12-07-2018 08:41 -> 24
+require('events').EventEmitter.defaultMaxListeners = 40;
+process.on('warning', e => console.warn(e.stack));
 
+global.Micro = require('../')
 global.Hemera = require('../node_modules/nats-hemera')
 global.HemeraSymbols = require('../node_modules/nats-hemera/lib/symbols')
 global.HemeraUtil = require('../node_modules/nats-hemera/lib/util')
@@ -21,5 +15,18 @@ global.Sinon = require('sinon')
 global.HemeraTestsuite = require('hemera-testsuite')
 global.expect = global.Code.expect
 global.UnauthorizedError = Hemera.createError('Unauthorized')
+global.chai = require('chai')
+global.chaiThings = require('chai-things')
+global.chai.use(global.chaiThings)
+global.should = global.chai.should()
+global.spawn = require('child_process').spawn
+
+global.nats_port = 4222
+global.nats_url = 'nats://localhost:' + global.nats_port
+
+global.MicroserviceTestServer = function(done) {
+  global.spawn('pkill', ['gnatsd'])
+  return global.HemeraTestsuite.start_server(global.nats_port, done)
+}
 
 process.setMaxListeners(0)

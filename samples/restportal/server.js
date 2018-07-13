@@ -2,6 +2,7 @@
 const env = require('./env');
 
 const express    = require('express');
+const GracefulShutdownManager = require('@moebius/http-graceful-shutdown').GracefulShutdownManager;
 const app        = express();
 const bodyParser = require('body-parser');
 const cors       = require('cors');
@@ -20,7 +21,7 @@ router.get('/ping', function(req, res) {
 });
 
 
-const micro = require('../../').create({nats_url:'nats://localhost:4223'});
+const micro = require('../../').create({nats_url:'nats://localhost:4222'});
 
 const delivery = (res) => {
   return (err, ans) => {
@@ -55,8 +56,21 @@ router.get('/ping-config', (req, res) => {
 */
 app.use('/', router);
 
-micro.start(()=>{
-  app.listen(port);
+micro.start(() => {
+  app.server = app.listen(port);
+  app.shutdownManager = new GracefulShutdownManager(app.server);
+});
+
+app.close = (fn) => {
+  if(app.shutdownManager) {
+    app.shutdownManager.terminate(() => {
+      micro.close(fn);
+    });
+  }
+};
+
+process.on('SIGTERM', () => {
+  app.close();
 });
 
 module.exports = app;

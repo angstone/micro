@@ -7,4 +7,4 @@ micro.addProcedure({
   },*/
 });
 
-module.exports = micro.start();
+module.exports = micro;

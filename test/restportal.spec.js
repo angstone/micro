@@ -1,30 +1,31 @@
 'use strict'
 
-//Require the dev-dependencies
-const chai = require('chai');
 const chaiHttp = require('chai-http');
-const should = chai.should();
 chai.use(chaiHttp);
-
-const HemeraTestsuite = require('hemera-testsuite')
 
 describe('RESTPORTAL', () => {
 
-  let PORT = 4223
-  let nats_url = 'nats://localhost:' + PORT
   let server
   let configServer
   let restportal
 
   before(function(done) {
-    server = HemeraTestsuite.start_server(PORT, done);
-    restportal = require('../samples/restportal');
-    configServer = require('../samples/config-server');
+    server = MicroserviceTestServer(()=>{
+      configServer = require('../samples/config-server');
+      configServer.start(()=>{
+        restportal = require('../samples/restportal');
+        done();
+      });
+    });
   })
 
   after(function(done) {
-    server.kill();
-    done();
+    restportal.close(()=>{
+      configServer.close(()=>{
+        server.kill();
+        done();
+      });
+    });
   })
 
   describe('/GET ping', () => {
