@@ -12,15 +12,17 @@ describe('RULER', function() {
   })
 
   after(function(done) {
-    micro.close(()=>{
-      server.kill()
-      done()
-    })
+    server.kill()
+    done()
   })
 
   beforeEach(function(done) {
-    micro = Micro.create({ nats_url });
+    micro = Micro({ nats_url });
     done()
+  })
+
+  afterEach(function(done) {
+    micro.close(done)
   })
 
   it('Should be able to be tested', function(done) {

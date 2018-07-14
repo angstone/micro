@@ -8,27 +8,23 @@ describe('ERROR MODULE', function() {
   let NO_DESCRIPTION
 
   before(function(done) {
-    server = MicroserviceTestServer(done)
     COMMON_TYPES = require('../lib/modules/error/commonTypes')
     NO_DESCRIPTION = 'No description was provided for this error.'
+    server = MicroserviceTestServer(done)
   })
 
   after(function(done) {
-    micro.close(()=>{
-      server.kill()
-      done()
-    })
+    server.kill()
+    done()
   })
 
   beforeEach(function(done) {
-    micro = Micro.create({ nats_url, debug: false });
-    done();
+    micro = Micro({ nats_url, debug: false })
+    done()
   })
 
   afterEach(function(done) {
-    micro.close(()=>{
-      done();
-    });
+    micro.close(done);
   })
 
   it('Should be able to be tested', function(done) {
@@ -38,11 +34,13 @@ describe('ERROR MODULE', function() {
   it('Should be able to be created', function(done) {
     micro.addProcedure({
       load: ['error'],
-    }).start();
-    expect(micro).to.be.exists();
-    micro.procedures.should.contain.a.thing.with.property('load');
-    expect( micro.procedures.filter(procedure=>!!procedure.load.error).length ).to.be.at.least(1);
-    done()
+    }).start(()=>{
+      expect(micro).to.be.exists()
+      micro.procedures.should.contain.a.thing.with.property('load')
+      expect( micro.procedures.filter(procedure=>!!procedure.load.error).length ).to.be.at.least(1)
+      expect( micro.procedures[0].load.error.load.logger ).to.be.exists()
+      done()
+    });
   })
 
   it('Should be able to generate errors', function(done) {
@@ -116,27 +114,29 @@ describe('ERROR MODULE', function() {
   })
 
   it('Should handle operational errors gracefuly', function(done) {
-    spawn('rm', ['log/error.log']);
-    spawn('rm', ['log/error.log']);
-    micro.addProcedure({
-      load: ['error'],
-      start: function() {
-        try {
-          this.load.error.throw();
-          console.error('There is a Error in trown Function. Thats is very bad, dont you think?')
-        } catch(e) {
-          expect(e instanceof Error).to.be.equals(true)
-          this.load.error.handle(e);
-          const tail = spawn('tail', ['-1','log/info.log']);
-          tail.stdout.on('data', (data) => {
-            const err_built = JSON.parse(data.toString());
-            expect(err_built.name).to.be.equals('logger');
-            expect(err_built.msg).to.be.equals('Error! Type: Generic Operational Error | Description: No description was provided for this error.');
-            done();
-          });
-        }
-      },
-    }).start();
+    spawn('rm', ['-r', 'log']).on('close', (code)=>{
+      micro.addProcedure({
+        load: ['error'],
+        start: function() {
+          setTimeout(()=>{
+            try {
+              this.load.error.throw();
+              console.error('There is a Error in trown Function. Thats is very bad, dont you think?')
+            } catch(e) {
+              expect(e instanceof Error).to.be.equals(true)
+              this.load.error.handle(e);
+              const tail = spawn('tail', ['-1','log/info.log']);
+              tail.stdout.on('data', (data) => {
+                const err_built = JSON.parse(data.toString());
+                expect(err_built.name).to.be.equals('logger');
+                expect(err_built.msg).to.be.equals('Error! Type: Generic Operational Error | Description: No description was provided for this error.');
+                done();
+              });
+            }
+          }, 10);
+        },
+      }).start();
+    })
   })
 
 })

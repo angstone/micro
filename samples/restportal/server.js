@@ -21,7 +21,7 @@ router.get('/ping', function(req, res) {
 });
 
 
-const micro = require('../../').create({nats_url:'nats://localhost:4222'});
+const micro = require('../../')({nats_url:'nats://localhost:4222'});
 
 const delivery = (res) => {
   return (err, ans) => {

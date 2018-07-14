@@ -10,14 +10,17 @@ describe('MICROSERVICE', function() {
   })
 
   after(function(done) {
-    micro.close(()=>{
-      server.kill()
-      done()
-    })
+    server.kill()
+    done()
   })
 
   beforeEach(function(done) {
     done()
+  })
+
+  afterEach(function(done) {
+    if(micro) micro.close(done)
+    else done()
   })
 
   it('Should be able to be tested', function(done) {
@@ -25,7 +28,7 @@ describe('MICROSERVICE', function() {
   })
 
   it('Should be able to be created', function(done) {
-    micro = Micro.create({ nats_url });
+    micro = Micro({ nats_url });
     expect(micro).to.be.exists()
     expect(micro.env.nats_url).to.be.equals(nats_url)
     done()
@@ -35,7 +38,7 @@ describe('MICROSERVICE', function() {
     const debug = false;
     const log_file_path = 'klapaucius';
     const log_info_in_file = false;
-    micro = Micro.create({ nats_url, debug, log_file_path, log_info_in_file });
+    micro = Micro({ nats_url, debug, log_file_path, log_info_in_file });
     expect(micro).to.be.exists()
     expect(micro.env.nats_url).to.be.equals(nats_url)
     expect(micro.env.debug).to.be.equals(debug)
@@ -48,7 +51,7 @@ describe('MICROSERVICE', function() {
     const debug = false;
     const log_file_path = 'japancide';
     const log_info_in_file = false;
-    micro = Micro.create({ nats_url, debug, log_file_path, log_info_in_file });
+    micro = Micro({ nats_url, debug, log_file_path, log_info_in_file });
     expect(micro).to.be.exists()
     expect(micro.env.nats_url).to.be.equals(nats_url)
     expect(micro.env.debug).to.be.equals(debug)
@@ -61,7 +64,7 @@ describe('MICROSERVICE', function() {
     const debug = true;
     const log_file_path = 'log';
     const log_info_in_file = true;
-    micro = Micro.create({ nats_url });
+    micro = Micro({ nats_url });
     expect(micro).to.be.exists()
     expect(micro.env.nats_url).to.be.equals(nats_url)
     expect(micro.env.debug).to.be.equals(debug)
@@ -71,7 +74,7 @@ describe('MICROSERVICE', function() {
   })
 
   it('Should be void started', function(done) {
-    micro = Micro.create({ nats_url });
+    micro = Micro({ nats_url });
     micro.start(()=>{
       expect(micro).to.be.exists()
       expect(micro.env.nats_url).to.be.equals(nats_url)
@@ -80,7 +83,7 @@ describe('MICROSERVICE', function() {
   })
 
   it('Should be able to add a command and start serving it', function(done) {
-    micro = Micro.create({ nats_url });
+    micro = Micro({ nats_url });
     let action = 'add';
     let func = (req, cb)=>{ cb(null, { result: req.a + req.b }) };
     micro.add(action, func).start(()=>{
@@ -97,7 +100,7 @@ describe('MICROSERVICE', function() {
   })
 
   it('Should be able to request/reply', function(done) {
-    micro = Micro.create({ nats_url });
+    micro = Micro({ nats_url });
     micro.add('add', (req, cb)=>{
       cb(null, { result: req.a + req.b });
     });

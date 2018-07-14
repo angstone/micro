@@ -1,4 +1,4 @@
-const micro = require('../../').create();
+const micro = require('../../')();
 
 micro.addProcedure({
   load: ['configServer'],
