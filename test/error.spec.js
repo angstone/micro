@@ -69,7 +69,7 @@ describe('ERROR MODULE', function() {
         expect(this.load.error.is).to.be.exists()
         expect(error_generated).to.be.exists()
         expect(error_generated.isOperational).to.be.equals(false)
-        expect(error_generated.commonType).to.be.equals(COMMON_TYPES.UNKKNOWN);
+        expect(error_generated.commonType).to.be.equals(COMMON_TYPES.UNKNOWN);
         expect(error_generated.description).to.be.equals(NO_DESCRIPTION);
         done()
       },

@@ -52,4 +52,23 @@ describe('AUTH', function() {
     );
   })
 
+  //it('Should be able to signup an User', function(done) {
+  //  const user_signup_data = {
+  //    name: 'Fulanildo',
+  //    email: 'tomatecru@sefeder.com',
+  //    password: 'magicword'
+  //  }
+  //  micro.addProcedure({
+  //    load: ['auth'],
+  //  }).start(()=>{
+  //      expect(micro).to.be.exists();
+  //      micro.act('auth signup', user_signup_data, (err, ans)=>{
+  //        expect(err).not.to.be.exists()
+  //        expect(ans.token).to.be.exists()
+  //        done()
+  //      });
+  //    }
+  //  );
+  //})
+
 })

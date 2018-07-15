@@ -9,15 +9,21 @@ Not ready for production!
 
 ### To be tested
 
-It needs docker running:
-
 * nats
 * eventstore
 
-and now we can create and test:
+Right now we can create and test with npm test:
+
+Modules:
+
+* util
+* error
+* logger
+* ruler
+* commander
 * config-server
 * rest-portal
-
+* auth
 
 
 ## Engineering Aspects
