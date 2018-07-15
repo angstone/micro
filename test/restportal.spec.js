@@ -43,7 +43,6 @@ describe('RESTPORTAL', () => {
 
   });
 
-
   describe('/GET ping-config', () => {
 
     it('RESTPORTAL should GET a ping on config server', (done) => {
@@ -58,6 +57,5 @@ describe('RESTPORTAL', () => {
     });
 
   });
-
 
 });

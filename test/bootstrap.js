@@ -3,7 +3,7 @@
 // Fix memory leaks preventer warnings about event mas listeners limit. Please track this number!
 // 12-07-2018 08:41 -> 24
 // 14-07-2018 08:41 -> 28
-require('events').EventEmitter.defaultMaxListeners = 28;
+require('events').EventEmitter.defaultMaxListeners = 200;
 process.on('warning', e => console.warn(e.stack));
 
 global.Micro = require('../')

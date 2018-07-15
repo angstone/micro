@@ -105,13 +105,30 @@ describe('MICROSERVICE', function() {
       cb(null, { result: req.a + req.b });
     });
     micro.start(()=>{
-      //setTimeout(()=>{
-        micro.act('add', { a: 1, b: 2 }, (err, resp)=>{
-          expect(err).not.to.be.exists()
-          expect(resp.result).to.be.equals(3)
-          done()
+      micro.act('add', { a: 1, b: 2 }, (err, resp)=>{
+        expect(err).not.to.be.exists()
+        expect(resp.result).to.be.equals(3)
+        done()
+      });
+    });
+  })
+
+  it('Should be able to request/reply from a procedure added with an async function', function(done) {
+    micro = Micro({ nats_url });
+    micro.addProcedure({
+      load: ['add'],
+      start: async function() {
+        this.load.add('add', (req, cb)=>{
+          cb(null, { result: req.a + req.b });
         });
-      //},10);
+        await new Promise(resolve=>{ setTimeout(resolve, 20) });
+      }
+    }).start(()=>{
+      micro.act('add', { a: 1, b: 2 }, (err, resp)=>{
+        expect(err).not.to.be.exists()
+        expect(resp.result).to.be.equals(3)
+        done()
+      });
     });
   })
 

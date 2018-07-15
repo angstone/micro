@@ -68,18 +68,19 @@ describe('CONFIG SERVER', function() {
     });
   })
 
-  /*it('Should be able to set a config and respond it', function(done) {
+  it('Should be able to set a config and respond it', function(done) {
     const config = { lord: 'Jesus Cristo' };
     micro.addProcedure({
       load: ['configServer'],
-    }).start();
-    expect(micro).to.be.exists();
-    micro.act('set config', config, (err, ans)=>{
-      expect(err).not.to.be.exists()
-      micro.act('get config', config, (err, ans)=>{
+    }).start(()=>{
+      expect(micro).to.be.exists();
+      micro.act('set config', config, (err, ans)=>{
         expect(err).not.to.be.exists()
-        expect(ans).to.be.equals(config)
-        done()
+        micro.act('get config', config, (err, ans)=>{
+          expect(err).not.to.be.exists()
+          expect(ans).to.be.equals(config)
+          done()
+        });
       });
     });
   })
@@ -92,15 +93,16 @@ describe('CONFIG SERVER', function() {
       start: function() {
         this.load.configServer.setConfig(config);
       },
-    }).start();
-    expect(micro).to.be.exists();
-    micro.act('set config', { liveFor }, (err, ans)=>{
-      expect(err).not.to.be.exists()
-      micro.act('get config', config, (err, ans)=>{
+    }).start(()=>{
+      expect(micro).to.be.exists();
+      micro.act('set config', { liveFor }, (err, ans)=>{
         expect(err).not.to.be.exists()
-        expect(ans.lord).to.be.equals(config.lord)
-        expect(ans.liveFor).to.be.equals(liveFor)
-        done()
+        micro.act('get config', config, (err, ans)=>{
+          expect(err).not.to.be.exists()
+          expect(ans.lord).to.be.equals(config.lord)
+          expect(ans.liveFor).to.be.equals(liveFor)
+          done()
+        });
       });
     });
   })
@@ -113,12 +115,13 @@ describe('CONFIG SERVER', function() {
       start: function() {
         this.load.configServer.setConfig(config);
       },
-    }).start();
-    expect(micro).to.be.exists();
-    micro.act('get config', 'liveFor', (err, ans)=>{
-      expect(err).not.to.be.exists()
-      expect(ans).to.be.equals(liveFor)
-      done()
+    }).start(()=>{
+      expect(micro).to.be.exists();
+      micro.act('get config', 'liveFor', (err, ans)=>{
+        expect(err).not.to.be.exists()
+        expect(ans).to.be.equals(liveFor)
+        done()
+      });
     });
   })
 
@@ -132,18 +135,19 @@ describe('CONFIG SERVER', function() {
       start: function() {
         this.load.configServer.setConfig(config);
       },
-    }).start();
-    expect(micro).to.be.exists();
-    micro.act('set config', { liveFor: { love: { each: { other: { as: newAs } } } } }, (err, ans)=>{
-      expect(err).not.to.be.exists()
-      micro.act('get config', 'liveFor love each other as so', (err, ans)=>{
+    }).start(()=>{
+      expect(micro).to.be.exists();
+      micro.act('set config', { liveFor: { love: { each: { other: { as: newAs } } } } }, (err, ans)=>{
         expect(err).not.to.be.exists()
-        expect(ans).to.be.equals(so)
-        config.liveFor.love.each.other.as = newAs;
-        micro.act('get config', (err, ans)=>{
+        micro.act('get config', 'liveFor love each other as so', (err, ans)=>{
           expect(err).not.to.be.exists()
-          expect(ans).to.be.equals(config);
-          done()
+          expect(ans).to.be.equals(so)
+          config.liveFor.love.each.other.as = newAs;
+          micro.act('get config', (err, ans)=>{
+            expect(err).not.to.be.exists()
+            expect(ans).to.be.equals(config);
+            done()
+          });
         });
       });
     });
@@ -157,23 +161,22 @@ describe('CONFIG SERVER', function() {
       start: function() {
         this.load.configServer.setConfig(config);
       },
-    }).start();
-    expect(micro).to.be.exists();
-    micro.act('set config', { liveFor: { love } }, (err, ans)=>{
-      expect(err).not.to.be.exists()
-      micro.act('get config', 'liveFor love', (err, ans)=>{
+    }).start(()=>{
+      expect(micro).to.be.exists();
+      micro.act('set config', { liveFor: { love } }, (err, ans)=>{
         expect(err).not.to.be.exists()
-        expect(ans).to.be.equals(love)
-        config.liveFor.love = love;
-        micro.act('get config', (err, ans)=>{
+        micro.act('get config', 'liveFor love', (err, ans)=>{
           expect(err).not.to.be.exists()
-          expect(ans).to.be.equals(config);
-          done()
+          expect(ans).to.be.equals(love)
+          config.liveFor.love = love;
+          micro.act('get config', (err, ans)=>{
+            expect(err).not.to.be.exists()
+            expect(ans).to.be.equals(config);
+            done()
+          });
         });
       });
     });
   })
-
-  */
 
 })
