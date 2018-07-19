@@ -19,10 +19,13 @@
   "dependencies": {
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "bunyan": "^1.8.12",
+    "circular-json": "^0.5.5",
     "cycle": "^1.0.3",
     "nats": "^0.8.10",
     "nats-hemera": "^5.8.6",
-    "taffy": "^2.6.2"
+    "node-fetch": "^2.1.2",
+    "taffy": "^2.6.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",

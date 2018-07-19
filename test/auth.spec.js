@@ -54,9 +54,10 @@ describe('AUTH', function() {
 
   //it('Should be able to signup an User', function(done) {
   //  const user_signup_data = {
-  //    name: 'Fulanildo',
+  //    name: 'Fulanildo Martinez',
   //    email: 'tomatecru@sefeder.com',
-  //    password: 'magicword'
+  //    password: 'magicword123'
+  //    password_confirmation: 'magicword123'
   //  }
   //  micro.addProcedure({
   //    load: ['auth'],
@@ -65,6 +66,7 @@ describe('AUTH', function() {
   //      micro.act('auth signup', user_signup_data, (err, ans)=>{
   //        expect(err).not.to.be.exists()
   //        expect(ans.token).to.be.exists()
+  //        console.log('GOT TOKEN: ', ans.token)
   //        done()
   //      });
   //    }

@@ -66,7 +66,7 @@ describe('ERROR MODULE', function() {
       start: function() {
         const error_generated = this.load.error.fatal();
         expect(this.load.error).to.be.exists()
-        expect(this.load.error.is).to.be.exists()
+        expect(this.load.error.fatal).to.be.exists()
         expect(error_generated).to.be.exists()
         expect(error_generated.isOperational).to.be.equals(false)
         expect(error_generated.commonType).to.be.equals(COMMON_TYPES.UNKNOWN);
