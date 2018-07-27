@@ -52,25 +52,27 @@ describe('AUTH', function() {
     );
   })
 
-  //it('Should be able to signup an User', function(done) {
-  //  const user_signup_data = {
-  //    name: 'Fulanildo Martinez',
-  //    email: 'tomatecru@sefeder.com',
-  //    password: 'magicword123'
-  //    password_confirmation: 'magicword123'
-  //  }
-  //  micro.addProcedure({
-  //    load: ['auth'],
-  //  }).start(()=>{
-  //      expect(micro).to.be.exists();
-  //      micro.act('auth signup', user_signup_data, (err, ans)=>{
-  //        expect(err).not.to.be.exists()
-  //        expect(ans.token).to.be.exists()
-  //        console.log('GOT TOKEN: ', ans.token)
-  //        done()
-  //      });
-  //    }
-  //  );
-  //})
+  /*
+  it('Should be able to signup an User', function(done) {
+    const user_signup_data = {
+      name: 'Fulanildo Martinez',
+      login: 'tomatecru',
+      password: 'magicword123',
+      password_confirmation: 'magicword123'
+    }
+    micro.addProcedure({
+      load: ['auth'],
+    }).start(()=>{
+        expect(micro).to.be.exists();
+        micro.act('auth signup', user_signup_data, (err, ans)=>{
+          expect(err).not.to.be.exists()
+          expect(ans).to.be.exists()
+          console.log('GOT ID: ', ans)
+          done()
+        });
+      }
+    );
+  })
+  */
 
 })

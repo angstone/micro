@@ -34,7 +34,7 @@ model -> inMemoryOrm : help me remember about the new user
 inMemoryOrm -> model : user
 model -> rules : this is the user
 rules -> index : that is the user created
-index -> restportal : the user token for fulano session
+index -> restportal : the user id for fulano
 else no he can't
 rules -> index: due to already exists
 index -> restportal: unauthorized error: already exists

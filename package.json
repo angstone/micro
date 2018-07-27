@@ -21,6 +21,7 @@
     "bunyan": "^1.8.12",
     "circular-json": "^0.5.5",
     "cycle": "^1.0.3",
+    "event-store-client": "^1.0.0",
     "nats": "^0.8.10",
     "nats-hemera": "^5.8.6",
     "node-fetch": "^2.1.2",
