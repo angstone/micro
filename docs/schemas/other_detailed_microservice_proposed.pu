@@ -1,0 +1,50 @@
+@startuml
+title Microservice For Angstone
+boundary client
+boundary user_procedure
+box "microservice"
+participant auth << (A,#ADD1B2) >>
+participant commander << (C,#ADD1B2) >>
+control ruler << (B,#ADD1B2) >>
+database modeler << (D,#ADD1B2) >>
+participant evt << (E,#ADD1B2) >>
+participant reducer << (R,#ADD1B2) >>
+participant appStream << (A,#ADD1B2) >>
+participant snapshooter << (S,#ADD1B2) >>
+participant streamListener << (L,#ADD1B2) >>
+end box
+== Boot Time ==
+
+user_procedure -> auth : LOAD
+auth -> commander : LOAD
+commander -> ruler : LOAD
+ruler -> modeler : LOAD
+modeler -> modeler : LOADED
+ruler -> ruler : LOADED
+commander -> commander : LOADED
+
+auth -> commander : ADD_COMMAND (cmd, rule, reducer)
+commander -> ruler : LOAD_RULE rule
+ruler -> modeler : GET_MODEL models
+modeler -> ruler : model_loaded[s]
+ruler -> commander : rule_loaded
+commander -> commander : command_added
+
+auth -> auth : LOADED
+user_procedure -> user_procedure : LOADED
+
+== Command Operations ==
+client -> commander : cmd data
+commander -> ruler : pre_validade data
+ruler -> commander : false(meaning valid)
+commander -> ruler : validate data
+ruler -> modeler : help-me w/ data
+modeler -> ruler : data
+ruler -> commander : false(meaning valid)
+commander -> ruler : what respond?
+ruler -> modeler : get stream$[s]
+modeler -> ruler : stream$[s]
+ruler -> ruler : response_function
+commander -> evt : dispatch cmd data
+
+@enduml
