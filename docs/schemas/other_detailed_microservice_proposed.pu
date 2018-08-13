@@ -10,23 +10,56 @@ database modeler << (D,#ADD1B2) >>
 participant evt << (E,#ADD1B2) >>
 participant reducer << (R,#ADD1B2) >>
 participant appStream << (A,#ADD1B2) >>
-participant snapshooter << (S,#ADD1B2) >>
 participant streamListener << (L,#ADD1B2) >>
+participant snapshooter << (S,#ADD1B2) >>
 end box
 == Boot Time ==
 
 user_procedure -> auth : LOAD
 auth -> commander : LOAD
 commander -> ruler : LOAD
+commander -> evt : LOAD
+commander -> reducer : LOAD
+
 ruler -> modeler : LOAD
 modeler -> modeler : LOADED
 ruler -> ruler : LOADED
+
+evt -> evt : LOADED
+
+reducer -> appStream : LOAD
+appStream -> streamListener : LOAD
+appStream -> snapshooter : LOAD
+
+streamListener -> streamListener : connection
+streamListener -> streamListener : LOADED
+
+snapshooter -> snapshooter : snapshot
+snapshooter -> snapshooter : LOADED
+
+reducer -> modeler : GET_MODEL models
+modeler -> appStream : GET STREAMS model_stream$[s]
+appStream -> modeler : model_stream$[s]
+modeler -> reducer : model_loaded[s]
+
+reducer -> appStream : GET event_stream$
+appStream -> reducer : event_stream$
+reducer -> reducer : ON EVENT
+reducer -> reducer : redux
+reducer -> appStream : EMIT model_stream$[s]
+
+reducer -> reducer : LOADED
+
 commander -> commander : LOADED
 
 auth -> commander : ADD_COMMAND (cmd, rule, reducer)
 commander -> ruler : LOAD_RULE rule
+
 ruler -> modeler : GET_MODEL models
+modeler -> appStream : GET STREAMS model_stream$[s]
+appStream -> modeler : model_stream$[s]
 modeler -> ruler : model_loaded[s]
+
 ruler -> commander : rule_loaded
 commander -> commander : command_added
 
@@ -45,6 +78,11 @@ commander -> ruler : what respond?
 ruler -> modeler : get stream$[s]
 modeler -> ruler : stream$[s]
 ruler -> ruler : response_function
-commander -> evt : dispatch cmd data
-
+commander -> evt : send cmd data
+evt -> appStream : dispatch cmd data
+appStream -> reducer : EMIT cmd data
+reducer -> reducer : REDUX
+reducer -> appStream : EMIT reduced model_stream[s]
+appStream -> ruler : reduced model_stream[s]
+ruler -> client : RESPOND data
 @enduml
