@@ -62,11 +62,13 @@ describe('STREAM LISTENER', function() {
             console.log(event_got.eventNumber!=event_number_expected);
             console.log("em cima ta dando verdadeiro que bosta é essa?");*/
             if(event_got.eventType==event_type) {
-              if(subscription) this.load.streamListener.drop(subscription);
-              subscription = null;
-              if(event_got.eventNumber!=event_number_expected) done('got wrong event number');
-              if( JSON.stringify(event_got.data) != JSON.stringify(event_payload) ) done('got wrong event payload');
-              done();
+              setTimeout(()=>{
+                if(event_got.eventNumber!=event_number_expected) done('got wrong event number');
+                if( JSON.stringify(event_got.data) != JSON.stringify(event_payload) ) done('got wrong event payload');
+                subscription = null;
+                if(subscription) this.load.streamListener.drop(subscription);
+                done();
+              }, 1000)
             }
           },
           () => {}, // onDropped

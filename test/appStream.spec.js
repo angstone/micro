@@ -45,12 +45,12 @@ describe('APP STREAM', function() {
       start: function() {
         // Start getting event stream and subscribing it:
         this.load.appStream.event_stream$.on(test_command, (payload)=>{
-          console.log("Got the event in flow success!");
+          //console.log("Got the event in flow success!");
           expect(payload).to.be.equals(test_command_payload);
           done();
         });
         setTimeout(()=>{
-          console.log("Now sending the event used to test flow:");
+          //console.log("Now sending the event used to test flow:");
           this.load.evt.send(test_command, test_command_payload);
         }, 1000);
       }
