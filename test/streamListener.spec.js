@@ -40,6 +40,7 @@ describe('STREAM LISTENER', function() {
   })
 
   it('Should execute the function listenToFrom and listen to an event', function(done) {
+    const wait_time = 100;
     micro.addProcedure({
       load: ['streamListener','evt', 'env'],
       start: function() {
@@ -68,7 +69,7 @@ describe('STREAM LISTENER', function() {
                 subscription = null;
                 if(subscription) this.load.streamListener.drop(subscription);
                 done();
-              }, 1000)
+              }, wait_time)
             }
           },
           () => {}, // onDropped

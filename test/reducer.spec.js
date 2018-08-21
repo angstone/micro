@@ -54,6 +54,7 @@ describe('REDUCER', function() {
   })
 
   it('Should be able to redux a single past command', function(done) {
+    const wait_time = 100;
     const command_name = 'single past reducer command';
     const name_expected = 'single_reducer_past_name'+(Math.random() +1).toString(36).substr(2, 5);
     const command_payload = { name: name_expected, first: Math.random(), second: Math.random() };
@@ -64,18 +65,21 @@ describe('REDUCER', function() {
       load: ['reducer', 'evt', 'modeler'],
       start: async function() {
         await this.load.evt.send(command_name, command_payload)
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
         await this.load.reducer.addReducer(command_name, reducer)
+        await new Promise(r=>setTimeout(r, wait_time))
         const user_model = await this.load.modeler.getModel('user');
         const user_created_by_redux = user_model.data({name: name_expected}).first();
         expect(user_created_by_redux).to.be.not.equals(false);
-        expect(user_created_by_redux.result).to.be.equals(result_expected)
-        done()
+        expect(user_created_by_redux.result).to.be.equals(result_expected);
+        done();
       }
     }).start();
   })
 
+
   it('Should be able to redux a single future command', function(done) {
+    const wait_time = 100;
     const command_name = 'single future reducer command';
     const name_expected = 'single_reducer_future_name'+(Math.random() +1).toString(36).substr(2, 5);
     const command_payload = { name: name_expected, first: Math.random(), second: Math.random() };
@@ -86,9 +90,9 @@ describe('REDUCER', function() {
       load: ['reducer', 'evt', 'modeler'],
       start: async function() {
         await this.load.reducer.addReducer(command_name, reducer)
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
         await this.load.evt.send(command_name, command_payload)
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
         const user_model = await this.load.modeler.getModel('user');
         const user_created_by_redux = user_model.data({name: name_expected}).first();
         expect(user_created_by_redux).to.be.not.equals(false);
@@ -98,7 +102,8 @@ describe('REDUCER', function() {
     }).start();
   })
 
-  it('Should be able to redux a multiple past commands', function(done) {
+  it('Should be able to redux multiple past commands', function(done) {
+    const wait_time = 100;
     const amount = 30;
 
     const command_name = 'multiple past reducer command';
@@ -119,9 +124,9 @@ describe('REDUCER', function() {
         for(let i=0; i<amount; i++) {
           await this.load.evt.send(command_name, command_payloads[i])
         }
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
         await this.load.reducer.addReducer(command_name, reducer)
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
 
         const user_model = await this.load.modeler.getModel('user');
         for(let i=0; i<amount; i++) {
@@ -134,7 +139,8 @@ describe('REDUCER', function() {
     }).start();
   })
 
-  it('Should be able to redux a multiple future commands', function(done) {
+  it('Should be able to redux multiple future commands', function(done) {
+    const wait_time = 100;
     const amount = 30;
 
     const command_name = 'multiple future reducer command';
@@ -154,12 +160,12 @@ describe('REDUCER', function() {
       start: async function() {
         await this.load.reducer.addReducer(command_name, reducer)
 
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
 
         for(let i=0; i<amount; i++) {
           await this.load.evt.send(command_name, command_payloads[i])
         }
-        await new Promise(r=>setTimeout(r, 1000))
+        await new Promise(r=>setTimeout(r, wait_time))
 
         const user_model = await this.load.modeler.getModel('user');
 
@@ -173,63 +179,66 @@ describe('REDUCER', function() {
     }).start();
   })
 
-  //it('Should be able to redux a two past commands and two future commands', function(done) {
-  //  const command_name = 'multiple reducer commands'+(Math.random() +1).toString(36).substr(2, 5);
-  //  const name_expecteds = [
-  //      'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
-  //      'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
-  //      'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
-  //      'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5)
-  //  ];
-  //  const command_payloads = [
-  //    { name: name_expecteds[0], first: Math.random(), second: Math.random() },
-  //    { name: name_expecteds[1], first: Math.random(), second: Math.random() },
-  //    { name: name_expecteds[2], first: Math.random(), second: Math.random() },
-  //    { name: name_expecteds[3], first: Math.random(), second: Math.random() }
-  //  ];
-  //  const result_expecteds = [
-  //    command_payloads[0].first+command_payloads[0].second,
-  //    command_payloads[1].first+command_payloads[1].second,
-  //    command_payloads[2].first+command_payloads[2].second,
-  //    command_payloads[3].first+command_payloads[3].second
-  //  ];
 
-  //  const reducer = require('./reducers/single_past_reducer');
-  //  micro.addProcedure({
-  //    load: ['reducer', 'evt', 'modeler'],
-  //    start: async function() {
-  //      await this.load.evt.send(command_name, command_payloads[0]);
-  //      await this.load.evt.send(command_name, command_payloads[1]);
+  it('Should be able to redux a two past commands and two future commands', function(done) {
+    const wait_time = 100;
+    const command_name = 'multiple reducer commands'+(Math.random() +1).toString(36).substr(2, 5);
+    const name_expecteds = [
+        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
+        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
+        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
+        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5)
+    ];
+    const command_payloads = [
+      { name: name_expecteds[0], first: Math.random(), second: Math.random() },
+      { name: name_expecteds[1], first: Math.random(), second: Math.random() },
+      { name: name_expecteds[2], first: Math.random(), second: Math.random() },
+      { name: name_expecteds[3], first: Math.random(), second: Math.random() }
+    ];
+    const result_expecteds = [
+      command_payloads[0].first+command_payloads[0].second,
+      command_payloads[1].first+command_payloads[1].second,
+      command_payloads[2].first+command_payloads[2].second,
+      command_payloads[3].first+command_payloads[3].second
+    ];
 
-  //      await new Promise(r=>setTimeout(r, 1000));
+    const reducer = require('./reducers/single_past_reducer');
+    micro.addProcedure({
+      load: ['reducer', 'evt', 'modeler'],
+      start: async function() {
+        await this.load.evt.send(command_name, command_payloads[0]);
+        await this.load.evt.send(command_name, command_payloads[1]);
 
-  //      await this.load.reducer.addReducer(command_name, reducer);
-  //      const user_model = await this.load.modeler.getModel('user');
+        await new Promise(r=>setTimeout(r, wait_time));
+        await this.load.reducer.addReducer(command_name, reducer);
+        await new Promise(r=>setTimeout(r, wait_time));
 
-  //      let user_created_by_redux = user_model.data({name: name_expecteds[0]}).first();
-  //      expect(user_created_by_redux).to.be.not.equals(false);
-  //      expect(user_created_by_redux.result).to.be.equals(result_expecteds[0]);
+        const user_model = await this.load.modeler.getModel('user');
 
-  //      user_created_by_redux = user_model.data({name: name_expecteds[1]}).first();
-  //      expect(user_created_by_redux).to.be.not.equals(false);
-  //      expect(user_created_by_redux.result).to.be.equals(result_expecteds[1]);
+        let user_created_by_redux = user_model.data({name: name_expecteds[0]}).first();
+        expect(user_created_by_redux).to.be.not.equals(false);
+        expect(user_created_by_redux.result).to.be.equals(result_expecteds[0]);
 
-  //      await this.load.evt.send(command_name, command_payloads[2]);
-  //      await this.load.evt.send(command_name, command_payloads[3]);
+        user_created_by_redux = user_model.data({name: name_expecteds[1]}).first();
+        expect(user_created_by_redux).to.be.not.equals(false);
+        expect(user_created_by_redux.result).to.be.equals(result_expecteds[1]);
 
-  //      await new Promise(r=>setTimeout(r, 1000));
+        await this.load.evt.send(command_name, command_payloads[2]);
+        await this.load.evt.send(command_name, command_payloads[3]);
 
-  //      user_created_by_redux = user_model.data({name: name_expecteds[2]}).first();
-  //      expect(user_created_by_redux).to.be.not.equals(false);
-  //      expect(user_created_by_redux.result).to.be.equals(result_expecteds[2]);
+        await new Promise(r=>setTimeout(r, 1000));
 
-  //      user_created_by_redux = user_model.data({name: name_expecteds[3]}).first();
-  //      expect(user_created_by_redux).to.be.not.equals(false);
-  //      expect(user_created_by_redux.result).to.be.equals(result_expecteds[3]);
+        user_created_by_redux = user_model.data({name: name_expecteds[2]}).first();
+        expect(user_created_by_redux).to.be.not.equals(false);
+        expect(user_created_by_redux.result).to.be.equals(result_expecteds[2]);
 
-  //      done();
-  //    }
-  //  }).start();
-  //})
+        user_created_by_redux = user_model.data({name: name_expecteds[3]}).first();
+        expect(user_created_by_redux).to.be.not.equals(false);
+        expect(user_created_by_redux.result).to.be.equals(result_expecteds[3]);
+
+        done();
+      }
+    }).start();
+  })
 
 })

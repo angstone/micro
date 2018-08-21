@@ -38,6 +38,7 @@ describe('APP STREAM', function() {
   })
 
   it('Should be able to get event stream properly', function(done) {
+    const wait_time = 300;
     const test_command = 'command_that_is_a_simple_test_'+(Math.random() +1).toString(36).substr(2, 5);
     const test_command_payload = { name: 'is_bond_'+(Math.random() +1).toString(36).substr(2, 5)};
     micro.addProcedure({
@@ -52,12 +53,13 @@ describe('APP STREAM', function() {
         setTimeout(()=>{
           //console.log("Now sending the event used to test flow:");
           this.load.evt.send(test_command, test_command_payload);
-        }, 1000);
+        }, wait_time);
       }
     }).start();
   })
 
   it('Should be able to get last three past events properly', function(done) {
+    const wait_time = 100;
     const past_command = 'command that that will be the three past_'+(Math.random() +1).toString(36).substr(2, 5);
     const past_payloads = [{ name: 'is bond' }, { james: 'bond' }, { name: 'is el', manu: 'el' }];
     micro.addProcedure({
@@ -71,7 +73,7 @@ describe('APP STREAM', function() {
         await this.sendEventI(1);
         await this.sendEventI(2);
 
-        await new Promise(resolve=>setTimeout(resolve, 1000));
+        await new Promise(resolve=>setTimeout(resolve, wait_time));
 
         new Promise(resolve=>{
           micro.close(()=>{
@@ -81,7 +83,7 @@ describe('APP STREAM', function() {
               load: ['appStream'],
               start: async function() {
 
-                await new Promise(resolve=>setTimeout(resolve, 1000));
+                await new Promise(resolve=>setTimeout(resolve, wait_time));
 
                 const past_object = this.load.appStream.past_events_since_last_snapshot;
 
