@@ -17,8 +17,7 @@ global.HemeraTestsuite = require('hemera-testsuite')
 global.expect = global.Code.expect
 global.UnauthorizedError = Hemera.createError('Unauthorized')
 global.chai = require('chai')
-global.chaiThings = require('chai-things')
-global.chai.use(global.chaiThings)
+global.chai.use(require('chai-things'))
 global.should = global.chai.should()
 global.spawn = require('child_process').spawn
 
@@ -28,6 +27,10 @@ global.nats_url = 'nats://localhost:' + global.nats_port
 global.MicroserviceTestServer = function(done) {
   global.spawn('pkill', ['gnatsd'])
   return global.HemeraTestsuite.start_server(global.nats_port, done)
+}
+
+global.randomString = function() {
+  return (Math.random() +1).toString(36).substr(2, 5);
 }
 
 process.setMaxListeners(0)

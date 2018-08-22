@@ -48,8 +48,8 @@ describe('STREAM LISTENER', function() {
         let event_number_expected = 0;
         let subscription = null;
 
-        const event_type = 'test_stream_listen_to_from_'+(Math.random() +1).toString(36).substr(2, 5);
-        const event_payload = {pay:'load', randonStr:(Math.random() +1).toString(36).substr(2, 5) };
+        const event_type = 'test_stream_listen_to_from_'+randomString();
+        const event_payload = {pay:'load', randonStr:randomString() };
 
         const fromEvent = 0;
 
@@ -90,8 +90,8 @@ describe('STREAM LISTENER', function() {
       load: ['streamListener','evt', 'env'],
       start: async function() {
 
-        const event_type = 'test_stream_listen_to_from_specific_'+(Math.random() +1).toString(36).substr(2, 5);
-        const event_payload = {pay:'load', randonStr:(Math.random() +1).toString(36).substr(2, 5) };
+        const event_type = 'test_stream_listen_to_from_specific_'+randomString();
+        const event_payload = {pay:'load', randonStr:randomString() };
 
         let event_number_expected = await this.load.evt.send(event_type, event_payload);
 

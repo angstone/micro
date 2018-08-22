@@ -56,7 +56,7 @@ describe('REDUCER', function() {
   it('Should be able to redux a single past command', function(done) {
     const wait_time = 100;
     const command_name = 'single past reducer command';
-    const name_expected = 'single_reducer_past_name'+(Math.random() +1).toString(36).substr(2, 5);
+    const name_expected = 'single_reducer_past_name'+randomString();
     const command_payload = { name: name_expected, first: Math.random(), second: Math.random() };
     const result_expected = command_payload.first+command_payload.second;
 
@@ -81,7 +81,7 @@ describe('REDUCER', function() {
   it('Should be able to redux a single future command', function(done) {
     const wait_time = 100;
     const command_name = 'single future reducer command';
-    const name_expected = 'single_reducer_future_name'+(Math.random() +1).toString(36).substr(2, 5);
+    const name_expected = 'single_reducer_future_name'+randomString();
     const command_payload = { name: name_expected, first: Math.random(), second: Math.random() };
     const result_expected = command_payload.first+command_payload.second;
 
@@ -104,7 +104,7 @@ describe('REDUCER', function() {
 
   it('Should be able to redux multiple past commands', function(done) {
     const wait_time = 100;
-    const amount = 30;
+    const amount = 3;
 
     const command_name = 'multiple past reducer command';
 
@@ -112,7 +112,7 @@ describe('REDUCER', function() {
     const command_payloads = [];
     const result_expecteds = [];
     for(let i=0; i<amount; i++) {
-      name_expecteds.push('multiple_reducer_past_name'+(Math.random() +1).toString(36).substr(2, 5));
+      name_expecteds.push('multiple_reducer_past_name'+randomString());
       command_payloads.push({ name: name_expecteds[i], first: Math.random(), second: Math.random() });
       result_expecteds.push(command_payloads[i].first+command_payloads[i].second);
     }
@@ -141,7 +141,7 @@ describe('REDUCER', function() {
 
   it('Should be able to redux multiple future commands', function(done) {
     const wait_time = 100;
-    const amount = 30;
+    const amount = 3;
 
     const command_name = 'multiple future reducer command';
 
@@ -149,7 +149,7 @@ describe('REDUCER', function() {
     const command_payloads = [];
     const result_expecteds = [];
     for(let i=0; i<amount; i++) {
-      name_expecteds.push('multiple_reducer_future_name'+(Math.random() +1).toString(36).substr(2, 5));
+      name_expecteds.push('multiple_reducer_future_name'+randomString());
       command_payloads.push({ name: name_expecteds[i], first: Math.random(), second: Math.random() });
       result_expecteds.push(command_payloads[i].first+command_payloads[i].second);
     }
@@ -182,12 +182,12 @@ describe('REDUCER', function() {
 
   it('Should be able to redux a two past commands and two future commands', function(done) {
     const wait_time = 100;
-    const command_name = 'multiple reducer commands'+(Math.random() +1).toString(36).substr(2, 5);
+    const command_name = 'multiple reducer commands'+randomString();
     const name_expecteds = [
-        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
-        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
-        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5),
-        'multiple_reducer_name'+(Math.random() +1).toString(36).substr(2, 5)
+        'multiple_reducer_name'+randomString(),
+        'multiple_reducer_name'+randomString(),
+        'multiple_reducer_name'+randomString(),
+        'multiple_reducer_name'+randomString()
     ];
     const command_payloads = [
       { name: name_expecteds[0], first: Math.random(), second: Math.random() },

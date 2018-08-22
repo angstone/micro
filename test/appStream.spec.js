@@ -39,15 +39,15 @@ describe('APP STREAM', function() {
 
   it('Should be able to get event stream properly', function(done) {
     const wait_time = 300;
-    const test_command = 'command_that_is_a_simple_test_'+(Math.random() +1).toString(36).substr(2, 5);
-    const test_command_payload = { name: 'is_bond_'+(Math.random() +1).toString(36).substr(2, 5)};
+    const test_command = 'command_that_is_a_simple_test_'+randomString();
+    const test_command_payload = { name: 'is_bond_'+randomString()};
     micro.addProcedure({
       load: ['evt', 'appStream'],
       start: function() {
         // Start getting event stream and subscribing it:
         this.load.appStream.event_stream$.on(test_command, (payload)=>{
           //console.log("Got the event in flow success!");
-          expect(payload).to.be.equals(test_command_payload);
+          expect(this.load.appStream.past_events_since_last_snapshot[test_command].pop().payload).to.be.equals(test_command_payload);
           done();
         });
         setTimeout(()=>{
@@ -60,7 +60,7 @@ describe('APP STREAM', function() {
 
   it('Should be able to get last three past events properly', function(done) {
     const wait_time = 100;
-    const past_command = 'command that that will be the three past_'+(Math.random() +1).toString(36).substr(2, 5);
+    const past_command = 'command that that will be the three past_'+randomString();
     const past_payloads = [{ name: 'is bond' }, { james: 'bond' }, { name: 'is el', manu: 'el' }];
     micro.addProcedure({
       load: ['evt'],
@@ -90,7 +90,9 @@ describe('APP STREAM', function() {
                 expect(past_object).to.be.exists()
                 expect(past_object[past_command]).to.be.exists()
                 expect(past_object[past_command]).to.be.array()
-                expect(past_object[past_command]).to.be.equals(past_payloads)
+                expect(past_object[past_command][0].payload).to.be.equals(past_payloads[0])
+                expect(past_object[past_command][1].payload).to.be.equals(past_payloads[1])
+                expect(past_object[past_command][2].payload).to.be.equals(past_payloads[2])
                 done()
 
               }
