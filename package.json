@@ -22,9 +22,11 @@
     "circular-json": "^0.5.5",
     "cycle": "^1.0.3",
     "event-store-client": "^1.0.0",
+    "jsonwebtoken": "^8.3.0",
     "nats": "^0.8.10",
     "nats-hemera": "^5.8.9",
     "node-fetch": "^2.2.0",
+    "randomstring": "^1.1.5",
     "taffy": "^2.6.2",
     "uuid": "^3.3.2"
   },
