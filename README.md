@@ -33,6 +33,8 @@ This encapsulates HemeraJS package witch encapsulates nats to create an magic fr
 
 ```git clone http://github.com/angstone/microservice```
 
+```sudo chmod +x scripts/*```
+
 ```npm i```
 
 ## Documentation
@@ -132,6 +134,33 @@ require('@angstone/microservice')().addProcedure({
 }).start();
 ```
 
+But the best part Is that:
+
+```
+require('@angstone/microservice')().addProcedure({
+  load:['commander'],
+  start: ()=>{
+    this.load.commander.addCommand('super_complex_command');
+
+    // If you put 'super_complex_command_rule.js' file in rules folder
+    // and you put 'super_complex_command_reducer.js' file in reducers folder
+    // also 'super_model.js' and 'other_required_model.js' in models folder
+    // They will be loaded and used to create the entire command cycle
+
+    // It takes the rule to authorize the operation, prevalidade, validate and to
+    // especify the respose after command apply.
+
+    // It takes the reducer file to apply the changes in db after the event got
+    // inside the event store
+
+    // It loads the models witch uses TAFFYDB
+
+    // Take a look in AUTH module that uses this mechanics and the reducer,
+    // rule and models files it uses in order tho understand the process.
+  }
+}).start();
+```
+
 ### To be tested
 
 ```sudo chmod +x scripts/*```
@@ -140,29 +169,47 @@ require('@angstone/microservice')().addProcedure({
 
 Modules:
 
-* util : many simple functions
 * error : generate errors and handle errors in on place.
+* appStream : take the events using streamListener, generate and holds streams for events in models and reducers
+* auth : several commands and views for a built-in auth solution
+* commander : the module used to declare a command along with your business rule object. This glue all togeter : rules, reducers, models
+* configClient : helpers to consume configServer
+* configServer : set and get server configuration. This one is used to share the config across many microservices and provide help for self discovery engine. allows to set other microservices configuration in one place
 * evt : set of shortcuts to generate and dispatch events commands.
-* dispatcher : dispatch the commands.
 * logger : one place for logs
+* modeler : generate and hold models based on model sheet Javascript Object
+* reducer : generate and holds reducers based on reducer sheet Javascript Object
 * ruler : generate the business rule object based on business rule sheet Javascript Object
-* commander : the module used to declare a command along with your business rule object
-* config-server : set and get server configuration. This one is used to share the config across many microservices and provide help for self discovery engine. allows to set other microservices configuration in one place
+* snapshooter : will take care of snapshoots automatically in future
+* util : many simple functions
+
+Samples:
+
 * rest-portal : simple example of restportal for access microservices
-* auth (on going work to provide built-in authentication)
 
 ## To Do
 
 done - make ruler and modeler loads automatically the modules using module loader
-* create test cases for those
 
-* define what exactly the auth will support
+done - create test cases for those
+
+done - define what exactly the auth will support
 * write business rules for auth in pseudocode
 * rewrite plantuml for auth based in new plantuml workflow
 * start the documentation of angstone with docusaurus
 * document completely the auth module
-* implement auth
 
+
+done - implement auth
+
+* resolve aleatory request timeout bug in workflow
+* implement snapshooter rewriting plantuml schemas
+* make configClient
+* test with snapshoots
+* test with multiply microservices instances of same service
+* create the orquestrator
+* create the autoconfig and autoupdate system
+* automatically separates rules for each strip of events based on updates in rule sheet
 
 
 ## Engineering Aspects
@@ -180,11 +227,11 @@ done - make ruler and modeler loads automatically the modules using module loade
 
 - The event is dispatched to EventStore
 
-- The confirmation event go to 'reducers'.
+- The event go to 'reducers'.
 
 - The reducers translate events in a set of changes in the models (in memory using TAFFY).
 
-- The views are used to retrieve and querry data from models. They are consumed by your endpoint api's.
+- The views are used to retrieve and querry data from models from outside the microservice. They are consumed by your endpoint api's.
 
 * All modules must have its dependencies loaded in an exclusive entity (new instance) or shared (singleton).
 The moduler loader take cares of declare the modules and it kind (singleton or newinstance)
