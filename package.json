@@ -1,21 +1,39 @@
 {
-  "name": "microservice",
-  "version": "0.0.0",
-  "description": "default package for helping build angstone microservices",
+  "name": "@angstone/micro",
+  "version": "0.0.1",
+  "description": "Backend Framework with NodeJS Event-sourced Microservices",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha -b -r \"./test/bootstrap\" -t 10000 --exit \"./test/*.spec.js\""
+    "test": "nyc mocha -b -r \"./test/bootstrap\" -t 10000 --exit \"./test/*.spec.js\"",
+    "start": "nyc mocha -b -r \"./test/bootstrap\" -t 10000 --exit \"./test/*.spec.js\""
   },
   "repository": {
     "type": "git",
-    "url": "/home/ss/GD/repos/@angstone/microservice"
+    "url": "git+ssh://git@github.com/angstone/micro.git"
   },
   "keywords": [
     "microservice",
+    "hemerajs",
+    "eventstore",
+    "taffy",
+    "backend",
+    "event-sourced",
+    "service-discovery",
+    "node",
+    "nodejs",
+    "framework",
     "angstone"
   ],
   "author": "ssribeiro",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angstone/micro/issues"
+  },
+  "homepage": "https://github.com/angstone/micro#readme",
+  "engines": {
+    "node": "=9.3.0",
+    "npm": "~6.4.0"
+  },
   "dependencies": {
     "@moebius/http-graceful-shutdown": "^1.1.0",
     "bunyan": "^1.8.12",
