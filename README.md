@@ -45,6 +45,10 @@ Working in a docusaurus...
 
 you can basically do this in order to create a webservice:
 
+add a nats if you don't yet:
+
+```docker run -p 4222:4222 -p 8222:8222 -p 6222:6222 --name gnatsd -ti nats:latest```
+
 ```
 // You should setup the configuration like this:
 
