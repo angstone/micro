@@ -167,6 +167,10 @@ require('@angstone/microservice')().addProcedure({
 
 ```npm test```
 
+and maybe you want to rebuild the eventstore:
+
+```docker stop microservice-eventstore-test-server && docker rm microservice-eventstore-test-server && npm test```
+
 Modules:
 
 * error : generate errors and handle errors in on place.
