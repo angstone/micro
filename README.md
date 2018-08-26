@@ -1,4 +1,4 @@
-# @angstone/microservice
+# @angstone/micro
 
 ANGSTONE Microservices Framework.
 
@@ -31,7 +31,7 @@ This encapsulates HemeraJS package witch encapsulates nats to create an magic fr
 
 ## To Install:
 
-```git clone http://github.com/angstone/microservice```
+```git clone http://github.com/angstone/micro```
 
 ```sudo chmod +x scripts/*```
 
@@ -53,7 +53,7 @@ const env = { nats_url:'http://localhost:2113', ... };
 // All the setup configuration can be set as environment variables like NATS_URL as well
 // so you can pass nothing instead of env
 
-const micro = require('@angstone/microservice')(env);
+const micro = require('@angstone/micro')(env);
 
 // Now you can add providers like:
 
@@ -106,14 +106,14 @@ Look at the samples folder for understand it better for while..
 But could you ever imagine create a microservice for your backend application like this:
 
 ```
-require('@angstone/microservice')().add('multiply two numbers', (req, cb)=>{
+require('@angstone/micro')().add('multiply two numbers', (req, cb)=>{
   cb(null, req.first+req.second);
 }).start();
 ```
 
 And consumes like this:
 ```
-require('@angstone/microservice')().act('multiply two numbers', { first: 5, second: 3 }, (err, res)=>{
+require('@angstone/micro')().act('multiply two numbers', { first: 5, second: 3 }, (err, res)=>{
   if(!err) console.log(res); // we expect 15 here
 }).start();
 ```
@@ -122,7 +122,7 @@ require('@angstone/microservice')().act('multiply two numbers', { first: 5, seco
 But you can also use this for create the service:
 
 ```
-require('@angstone/microservice')().addProcedure({
+require('@angstone/micro')().addProcedure({
   load:['commander'],
   start: ()=>{
     this.load.commander.addCommand('multiply two number', require('./rules/multiply_two_numbers_rule'));
@@ -137,7 +137,7 @@ require('@angstone/microservice')().addProcedure({
 But the best part Is that:
 
 ```
-require('@angstone/microservice')().addProcedure({
+require('@angstone/micro')().addProcedure({
   load:['commander'],
   start: ()=>{
     this.load.commander.addCommand('super_complex_command');
